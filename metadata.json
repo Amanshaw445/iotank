@@ -1,0 +1,8 @@
+
+{
+  "name": "ioTank - Pro Smart Water Management",
+  "description": "An advanced, AI-powered water management dashboard with real-time tracking, predictive analytics, and smart leak detection using Gemini.",
+  "requestFramePermissions": [
+    "notifications"
+  ]
+}
