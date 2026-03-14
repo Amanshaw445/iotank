@@ -3,949 +3,1092 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0a0f1e">
-  <meta name="description" content="ioTank - Smart Water Management">
+  <meta name="theme-color" content="#f5f7fa">
+  <meta name="description" content="ioTank - Universal Smart Tank Monitoring & Control System">
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icon-192.png">
-  <title>ioTank - Smart Water Management</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>ioTank — Smart Tank Monitor</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg-primary: #0a0f1e;
-      --bg-secondary: #141b2e;
-      --bg-card: #1a2332;
-      --accent-primary: #00ffcc;
-      --accent-secondary: #00ccff;
-      --accent-danger: #ff3366;
-      --accent-warning: #ffaa00;
-      --text-primary: #e8f1ff;
-      --text-secondary: #8aa0c4;
-      --glow-primary: rgba(0, 255, 204, 0.3);
-      --glow-secondary: rgba(0, 204, 255, 0.2);
+      --bg: #f4f6f9;
+      --surface: #ffffff;
+      --surface2: #f0f3f8;
+      --border: #e2e8f2;
+      --border2: #cdd5e3;
+      --text: #1a2035;
+      --text2: #5a6785;
+      --text3: #94a3be;
+      --accent: #2563eb;
+      --accent-light: #eff4ff;
+      --accent-dark: #1d4ed8;
+      --green: #16a34a;
+      --green-light: #f0fdf4;
+      --red: #dc2626;
+      --red-light: #fef2f2;
+      --orange: #ea580c;
+      --orange-light: #fff7ed;
+      --yellow: #d97706;
+      --yellow-light: #fffbeb;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow: 0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+      --shadow-lg: 0 10px 40px rgba(0,0,0,0.1), 0 4px 16px rgba(0,0,0,0.06);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --radius-xs: 6px;
     }
 
     body {
-      font-family: 'Rajdhani', sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
       overflow-x: hidden;
-      padding-top: 70px;
     }
 
-    .background-grid {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image:
-        linear-gradient(rgba(0, 255, 204, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 255, 204, 0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .background-gradient {
-      position: fixed;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle at 30% 20%, rgba(0, 255, 204, 0.08) 0%, transparent 50%),
-                  radial-gradient(circle at 70% 80%, rgba(0, 204, 255, 0.06) 0%, transparent 50%);
-      pointer-events: none;
-      z-index: 0;
-      animation: gradient-shift 20s ease infinite;
-    }
-
-    @keyframes gradient-shift {
-      0%, 100% { transform: translate(0, 0); }
-      50% { transform: translate(-5%, -5%); }
-    }
-
-    /* Navigation */
+    /* ── NAVBAR ── */
     .navbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 70px;
-      background: rgba(26, 35, 50, 0.8);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(0, 255, 204, 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      position: fixed; top: 0; left: 0; right: 0;
+      height: 60px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
       padding: 0 20px;
       z-index: 1000;
-      animation: fadeInDown 0.8s ease;
     }
-
-    .menu-btn {
-      width: 40px;
-      height: 40px;
-      background: transparent;
-      border: 1px solid rgba(0, 255, 204, 0.3);
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 5px;
-      transition: all 0.3s ease;
-    }
-
-    .menu-btn:hover {
-      border-color: var(--accent-primary);
-      box-shadow: 0 0 15px var(--glow-primary);
-    }
-
-    .menu-btn span {
-      width: 20px;
-      height: 2px;
-      background: var(--accent-primary);
-      transition: all 0.3s ease;
-    }
-
-    .account-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      border: 2px solid var(--accent-primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-family: 'Orbitron', monospace;
+    .nav-brand {
+      font-family: 'Space Mono', monospace;
       font-weight: 700;
-      color: var(--bg-primary);
-      box-shadow: 0 0 15px var(--glow-primary);
-      transition: all 0.3s ease;
+      font-size: 1.15rem;
+      color: var(--accent);
+      letter-spacing: -0.5px;
+    }
+    .nav-brand span { color: var(--text); }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .nav-badge {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--green-light);
+      color: var(--green);
+      font-size: 0.75rem; font-weight: 600;
+      padding: 4px 10px; border-radius: 20px;
+    }
+    .nav-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+    .menu-btn {
+      width: 36px; height: 36px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 8px; cursor: pointer;
+      display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px;
+      transition: all 0.2s;
+    }
+    .menu-btn:hover { background: var(--border); }
+    .menu-btn span { width: 16px; height: 1.5px; background: var(--text2); border-radius: 2px; }
+
+    /* ── BOTTOM NAV ── */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: 64px;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border);
+      display: flex; align-items: stretch;
+      z-index: 1000;
+    }
+    .nav-tab {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 3px; cursor: pointer; border: none; background: transparent;
+      color: var(--text3); font-size: 0.65rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.5px; transition: all 0.2s; padding: 8px 0;
+    }
+    .nav-tab.active { color: var(--accent); }
+    .nav-tab svg { width: 20px; height: 20px; }
+    .nav-tab-indicator {
+      position: absolute; bottom: 0; height: 3px; background: var(--accent);
+      border-radius: 3px 3px 0 0; transition: all 0.3s ease;
     }
 
-    .account-btn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 25px var(--glow-primary);
+    /* ── PAGES ── */
+    .page { display: none; padding: 76px 0 80px; min-height: 100vh; }
+    .page.active { display: block; }
+    .container { max-width: 600px; margin: 0 auto; padding: 0 16px; }
+
+    /* ── MATERIAL SELECTOR ── */
+    .material-bar {
+      display: flex; gap: 8px; overflow-x: auto; padding: 12px 16px;
+      scrollbar-width: none;
+    }
+    .material-bar::-webkit-scrollbar { display: none; }
+    .mat-chip {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 20px;
+      border: 1px solid var(--border); background: var(--surface);
+      font-size: 0.8rem; font-weight: 600; color: var(--text2);
+      cursor: pointer; white-space: nowrap; transition: all 0.2s;
+    }
+    .mat-chip.active {
+      background: var(--accent); color: white; border-color: var(--accent);
+    }
+    .mat-chip:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+
+    /* ── MAIN CARD ── */
+    .main-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px;
+      box-shadow: var(--shadow); margin: 8px 16px;
+    }
+    .card-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .card-title { font-weight: 600; color: var(--text2); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    .live-tag {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 0.72rem; font-weight: 700; color: var(--green);
+      background: var(--green-light); padding: 3px 8px; border-radius: 20px;
     }
 
-    /* Side Menu */
+    /* ── LEVEL DISPLAY ── */
+    .level-display { display: flex; align-items: center; gap: 24px; margin: 8px 0 20px; }
+    .tank-visual {
+      flex-shrink: 0; width: 72px; height: 140px;
+      border: 2.5px solid var(--border2); border-radius: 14px;
+      position: relative; background: var(--surface2); overflow: hidden;
+    }
+    .tank-fill {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(180deg, #60a5fa 0%, #2563eb 100%);
+      transition: height 1.5s cubic-bezier(0.4,0,0.2,1);
+      border-radius: 0 0 11px 11px;
+    }
+    .tank-fill.oil { background: linear-gradient(180deg, #fbbf24 0%, #d97706 100%); }
+    .tank-fill.chemical { background: linear-gradient(180deg, #a78bfa 0%, #7c3aed 100%); }
+    .tank-fill.fuel { background: linear-gradient(180deg, #fb923c 0%, #ea580c 100%); }
+    .tank-fill.grain { background: linear-gradient(180deg, #fde68a 0%, #d97706 100%); }
+    .tank-tick { position: absolute; left: -12px; height: 1px; background: var(--border2); width: 8px; }
+    .tank-tick-label { position: absolute; left: -36px; font-size: 0.55rem; color: var(--text3); font-family: 'Space Mono', monospace; transform: translateY(-50%); text-align: right; }
+
+    .level-info { flex: 1; }
+    .big-pct {
+      font-family: 'Space Mono', monospace;
+      font-size: 3.5rem; font-weight: 700; line-height: 1;
+      color: var(--text); margin-bottom: 4px;
+    }
+    .big-pct span { font-size: 1.5rem; color: var(--text3); }
+    .level-label { font-size: 0.8rem; color: var(--text3); font-weight: 500; margin-bottom: 16px; }
+    .level-bar { height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; margin-bottom: 12px; }
+    .level-bar-fill {
+      height: 100%; background: linear-gradient(90deg, #2563eb, #60a5fa);
+      border-radius: 3px; transition: width 1.5s ease;
+    }
+    .level-stats { display: flex; gap: 16px; }
+    .level-stat { }
+    .level-stat-val { font-family: 'Space Mono', monospace; font-size: 0.9rem; font-weight: 700; color: var(--text); }
+    .level-stat-lbl { font-size: 0.68rem; color: var(--text3); font-weight: 500; text-transform: uppercase; }
+
+    /* ── STATUS CHIPS ── */
+    .status-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 8px 16px; }
+    .stat-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+    .stat-icon { font-size: 1.2rem; margin-bottom: 6px; }
+    .stat-val { font-family: 'Space Mono', monospace; font-size: 1rem; font-weight: 700; color: var(--text); }
+    .stat-lbl { font-size: 0.68rem; color: var(--text3); font-weight: 500; text-transform: uppercase; margin-top: 2px; }
+
+    /* ── STATUS BADGE ── */
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 20px;
+    }
+    .status-badge.low { background: var(--red-light); color: var(--red); }
+    .status-badge.normal { background: var(--green-light); color: var(--green); }
+    .status-badge.high { background: var(--orange-light); color: var(--orange); }
+    .status-badge.filling { background: var(--accent-light); color: var(--accent); }
+    .status-badge.full { background: var(--green-light); color: var(--green); }
+
+    /* ── PUMP CARD ── */
+    .pump-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px;
+      box-shadow: var(--shadow-sm); margin: 8px 16px;
+    }
+    .pump-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .pump-label { font-weight: 600; color: var(--text); font-size: 0.95rem; }
+    .pump-sub { font-size: 0.75rem; color: var(--text3); margin-top: 2px; }
+    .pump-status-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--text3); transition: all 0.3s;
+    }
+    .pump-status-dot.active { background: var(--green); box-shadow: 0 0 8px var(--green); animation: pulse 1.5s infinite; }
+    .pump-btn {
+      width: 100%; padding: 14px;
+      border: 2px solid var(--accent); border-radius: var(--radius-sm);
+      background: var(--accent); color: white;
+      font-family: 'Space Mono', monospace; font-size: 0.85rem; font-weight: 700;
+      cursor: pointer; letter-spacing: 1px;
+      transition: all 0.2s; text-transform: uppercase;
+    }
+    .pump-btn:hover { background: var(--accent-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+    .pump-btn.active {
+      background: var(--red-light); color: var(--red); border-color: var(--red);
+    }
+    .pump-btn.active:hover { background: var(--red); color: white; }
+    .pump-meta { display: flex; justify-content: space-between; margin-top: 12px; }
+    .pump-meta-item { font-size: 0.72rem; color: var(--text3); }
+    .pump-meta-item strong { color: var(--text2); font-weight: 600; }
+
+    /* ── NOTIF ROW ── */
+    .notif-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 16px 20px;
+      margin: 8px 16px;
+      display: flex; align-items: center; justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+    }
+    .notif-lbl { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+    .notif-sub { font-size: 0.72rem; color: var(--text3); margin-top: 2px; }
+    .toggle {
+      width: 48px; height: 26px; border-radius: 13px;
+      background: var(--border2); cursor: pointer; position: relative;
+      transition: all 0.3s; border: none; flex-shrink: 0;
+    }
+    .toggle.on { background: var(--accent); }
+    .toggle::after {
+      content: ''; position: absolute;
+      width: 20px; height: 20px; background: white; border-radius: 50%;
+      top: 3px; left: 3px; transition: all 0.3s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+    .toggle.on::after { left: 25px; }
+
+    .sync-row {
+      display: flex; align-items: center; gap: 6px; justify-content: center;
+      padding: 12px; font-size: 0.72rem; color: var(--text3);
+    }
+
+    /* ── ANALYTICS ── */
+    .analytics-section { margin: 8px 16px 16px; }
+    .section-title { font-size: 0.8rem; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+    .chart-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px; margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+    .chart-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+    .chart-card-title { font-size: 0.9rem; font-weight: 700; color: var(--text); }
+    .chart-card-sub { font-size: 0.72rem; color: var(--text3); margin-top: 2px; }
+    .chart-tab-row { display: flex; gap: 4px; }
+    .chart-tab {
+      padding: 4px 10px; border-radius: 6px; font-size: 0.72rem; font-weight: 600;
+      cursor: pointer; border: none; background: transparent; color: var(--text3);
+      transition: all 0.2s;
+    }
+    .chart-tab.active { background: var(--accent-light); color: var(--accent); }
+    .chart-wrap { width: 100%; }
+    canvas { width: 100% !important; }
+
+    .insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+    .insight-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+    .insight-val { font-family: 'Space Mono', monospace; font-size: 1.4rem; font-weight: 700; color: var(--text); }
+    .insight-lbl { font-size: 0.7rem; color: var(--text3); font-weight: 500; text-transform: uppercase; margin-top: 4px; }
+    .insight-change { font-size: 0.72rem; font-weight: 600; margin-top: 4px; }
+    .insight-change.up { color: var(--green); }
+    .insight-change.down { color: var(--red); }
+
+    /* ── ABOUT ── */
+    .about-hero {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 50%, #2563eb 100%);
+      margin: 0; padding: 36px 24px 32px;
+      position: relative; overflow: hidden;
+    }
+    .about-hero::before {
+      content: ''; position: absolute; top: -40%; right: -20%;
+      width: 300px; height: 300px; border-radius: 50%;
+      background: rgba(255,255,255,0.04); pointer-events: none;
+    }
+    .about-hero::after {
+      content: ''; position: absolute; bottom: -30%; left: -10%;
+      width: 200px; height: 200px; border-radius: 50%;
+      background: rgba(255,255,255,0.04); pointer-events: none;
+    }
+    .about-logo { font-family: 'Space Mono', monospace; font-size: 2rem; font-weight: 700; color: white; margin-bottom: 6px; }
+    .about-tagline { font-size: 0.9rem; color: rgba(255,255,255,0.75); font-weight: 400; max-width: 320px; line-height: 1.5; }
+    .about-badges { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+    .about-badge {
+      background: rgba(255,255,255,0.12); color: white;
+      padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 600;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .about-body { padding: 16px; }
+    .about-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px; margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+    .about-card-title {
+      font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .about-card-title .icon { font-size: 1.1rem; }
+    .about-text { font-size: 0.85rem; color: var(--text2); line-height: 1.7; margin-bottom: 12px; }
+    .about-text:last-child { margin-bottom: 0; }
+
+    .feature-list { list-style: none; }
+    .feature-item {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 8px 0; border-bottom: 1px solid var(--border);
+      font-size: 0.85rem; color: var(--text2); line-height: 1.5;
+    }
+    .feature-item:last-child { border-bottom: none; }
+    .feature-icon { flex-shrink: 0; width: 20px; height: 20px; background: var(--accent-light); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; margin-top: 1px; }
+
+    .cost-table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+    .cost-table th { font-size: 0.72rem; text-transform: uppercase; color: var(--text3); font-weight: 700; padding: 8px 0; text-align: left; border-bottom: 2px solid var(--border); }
+    .cost-table td { font-size: 0.82rem; color: var(--text2); padding: 9px 0; border-bottom: 1px solid var(--border); }
+    .cost-table td:last-child { text-align: right; font-family: 'Space Mono', monospace; font-weight: 700; color: var(--text); }
+    .cost-total td { color: var(--accent); font-weight: 700; border-bottom: none; border-top: 2px solid var(--border); }
+
+    .competitor-card {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--red-light); border: 1px solid #fecaca;
+      border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 10px;
+    }
+    .comp-label { font-size: 0.82rem; font-weight: 600; color: var(--red); }
+    .comp-price { font-family: 'Space Mono', monospace; font-size: 1.1rem; font-weight: 700; color: var(--red); }
+
+    .our-card {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--green-light); border: 1px solid #bbf7d0;
+      border-radius: var(--radius-sm); padding: 14px 16px;
+    }
+    .our-label { font-size: 0.82rem; font-weight: 600; color: var(--green); }
+    .our-price { font-family: 'Space Mono', monospace; font-size: 1.1rem; font-weight: 700; color: var(--green); }
+    .savings-badge { font-size: 0.75rem; font-weight: 700; color: var(--green); background: #86efac; padding: 3px 8px; border-radius: 10px; }
+
+    .usecase-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .usecase-item {
+      background: var(--surface2); border-radius: var(--radius-xs);
+      padding: 12px; text-align: center;
+    }
+    .usecase-icon { font-size: 1.5rem; margin-bottom: 6px; }
+    .usecase-name { font-size: 0.75rem; font-weight: 600; color: var(--text); }
+    .usecase-desc { font-size: 0.68rem; color: var(--text3); margin-top: 2px; }
+
+    .spec-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.82rem; }
+    .spec-row:last-child { border-bottom: none; }
+    .spec-key { color: var(--text3); font-weight: 500; }
+    .spec-val { color: var(--text); font-weight: 600; font-family: 'Space Mono', monospace; font-size: 0.78rem; }
+
+    /* ── SIDE MENU ── */
     .side-menu {
-      position: fixed;
-      top: 0;
-      left: -300px;
-      width: 300px;
-      height: 100vh;
-      background: var(--bg-card);
-      border-right: 1px solid rgba(0, 255, 204, 0.2);
-      box-shadow: 5px 0 20px rgba(0, 0, 0, 0.5);
-      z-index: 999;
-      transition: left 0.4s ease;
+      position: fixed; top: 0; left: -280px; width: 280px; height: 100vh;
+      background: var(--surface); border-right: 1px solid var(--border);
+      box-shadow: var(--shadow-lg); z-index: 2000;
+      transition: left 0.35s cubic-bezier(0.4,0,0.2,1);
       overflow-y: auto;
     }
-
-    .side-menu.active {
-      left: 0;
+    .side-menu.open { left: 0; }
+    .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.25); backdrop-filter: blur(2px); z-index: 1999; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .menu-overlay.open { opacity: 1; pointer-events: all; }
+    .side-menu-head { padding: 60px 20px 20px; border-bottom: 1px solid var(--border); }
+    .side-menu-logo { font-family: 'Space Mono', monospace; font-size: 1.2rem; font-weight: 700; color: var(--accent); }
+    .side-menu-sub { font-size: 0.75rem; color: var(--text3); margin-top: 4px; }
+    .side-menu-items { padding: 12px 0; }
+    .side-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 20px; color: var(--text2); font-size: 0.9rem; font-weight: 500;
+      cursor: pointer; border: none; background: transparent; width: 100%;
+      text-align: left; transition: all 0.2s; text-decoration: none;
     }
+    .side-item:hover { background: var(--surface2); color: var(--text); }
+    .side-item .si-icon { font-size: 1rem; width: 20px; text-align: center; }
 
-    .menu-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(5px);
-      z-index: 998;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease;
-    }
-
-    .menu-overlay.active {
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    .menu-header {
-      padding: 30px 20px;
-      border-bottom: 1px solid rgba(0, 255, 204, 0.1);
-      text-align: center;
-    }
-
-    .menu-logo {
-      font-family: 'Orbitron', monospace;
-      font-size: 1.8rem;
-      font-weight: 900;
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .menu-items {
-      padding: 20px 0;
-    }
-
-    .menu-item {
-      padding: 18px 30px;
-      color: var(--text-primary);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      font-size: 1.1rem;
-      font-weight: 500;
-      transition: all 0.3s ease;
-      border-left: 3px solid transparent;
-    }
-
-    .menu-item:hover {
-      background: rgba(0, 255, 204, 0.1);
-      border-left-color: var(--accent-primary);
-      padding-left: 35px;
-    }
-
-    .menu-item-icon {
-      font-size: 1.3rem;
-    }
-
-    .container {
-      position: relative;
-      z-index: 1;
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-      min-height: calc(100vh - 70px);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .header {
-      text-align: center;
-      padding: 20px 20px 10px;
-      animation: fadeInDown 0.8s ease;
-    }
-
-    .logo {
-      font-family: 'Orbitron', monospace;
-      font-size: 2.5rem;
-      font-weight: 900;
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-shadow: 0 0 40px var(--glow-primary);
-      margin-bottom: 5px;
-      letter-spacing: 2px;
-    }
-
-    .subtitle {
-      font-size: 0.95rem;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      font-weight: 500;
-    }
-
-    .main-card {
-      background: var(--bg-card);
-      border-radius: 24px;
-      padding: 30px;
-      margin: 20px 0;
-      border: 1px solid rgba(0, 255, 204, 0.1);
-      box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
-      animation: fadeInUp 0.8s ease 0.2s backwards;
-    }
-
-    .tank-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .status-indicator {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: var(--accent-primary);
-      box-shadow: 0 0 15px var(--accent-primary);
-      animation: pulse 2s ease infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.6; transform: scale(1.3); }
-    }
-
-    .tank-title {
-      font-family: 'Orbitron', monospace;
-      font-size: 1.2rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-    }
-
-    .water-level-display {
-      text-align: center;
-      margin: 30px 0;
-    }
-
-    .big-number {
-      font-family: 'Orbitron', monospace;
-      font-size: 5rem;
-      font-weight: 900;
-      line-height: 1;
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-shadow: 0 0 20px var(--glow-primary);
-      margin-bottom: 5px;
-    }
-
-    .water-label {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-
-    .tank-visual {
-      display: flex;
-      justify-content: center;
-      margin: 30px 0;
-    }
-
-    .tank-frame {
-      width: 120px;
-      height: 240px;
-      border: 3px solid var(--accent-primary);
-      border-radius: 20px;
-      position: relative;
-      background: rgba(0, 0, 0, 0.4);
-      box-shadow: 0 0 20px var(--glow-primary), inset 0 0 15px rgba(0, 0, 0, 0.6);
-      overflow: hidden;
-    }
-
-    .water-fill {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      background: linear-gradient(180deg, var(--accent-secondary), var(--accent-primary));
-      transition: height 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 -5px 15px rgba(0, 255, 204, 0.5);
-    }
-
-    /* Status Boxes */
-    .status-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-      margin: 30px 0;
-    }
-
-    .status-box {
-      background: var(--bg-secondary);
-      border: 1px solid rgba(0, 255, 204, 0.2);
-      border-radius: 16px;
-      padding: 20px;
-      text-align: center;
-      transition: all 0.3s ease;
-    }
-
-    .status-box:hover {
-      border-color: var(--accent-primary);
-      box-shadow: 0 0 20px var(--glow-primary);
-      transform: translateY(-3px);
-    }
-
-    .status-box-label {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 10px;
-    }
-
-    .status-box-value {
-      font-family: 'Orbitron', monospace;
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--accent-primary);
-      text-shadow: 0 0 15px var(--glow-primary);
-    }
-
-    .status-box-value.low {
-      color: var(--accent-danger);
-      text-shadow: 0 0 15px rgba(255, 51, 102, 0.5);
-    }
-
-    .status-box-value.full {
-      color: var(--accent-primary);
-    }
-
-    .status-box-value.filling {
-      color: var(--accent-warning);
-      text-shadow: 0 0 15px rgba(255, 170, 0, 0.5);
-    }
-
-    .battery-icon {
-      font-size: 1.5rem;
-      margin-bottom: 5px;
-    }
-
-    /* Pump Button */
-    .pump-button {
-      width: 100%;
-      font-family: 'Orbitron', monospace;
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      color: var(--bg-primary);
-      border: none;
-      padding: 18px 30px;
-      border-radius: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 1rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px var(--glow-primary);
-      margin-top: 20px;
-    }
-
-    .pump-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 25px var(--glow-primary);
-    }
-
-    .pump-button.active {
-      background: linear-gradient(135deg, var(--accent-danger), #ff6633);
-      box-shadow: 0 4px 15px rgba(255, 51, 102, 0.5);
-    }
-
-    .pump-button.active:hover {
-      box-shadow: 0 6px 25px rgba(255, 51, 102, 0.5);
-    }
-
-    /* Notifications Toggle */
-    .notifications-section {
-      background: var(--bg-secondary);
-      border: 1px solid rgba(0, 255, 204, 0.1);
-      border-radius: 16px;
-      padding: 20px;
-      margin-top: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .notifications-label {
-      font-size: 0.95rem;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-
-    .toggle-switch {
-      position: relative;
-      width: 60px;
-      height: 30px;
-      background: var(--bg-card);
-      border-radius: 15px;
-      border: 1px solid rgba(0, 255, 204, 0.2);
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .toggle-switch.active {
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      border-color: var(--accent-primary);
-      box-shadow: 0 0 20px var(--glow-primary);
-    }
-
-    .toggle-switch::after {
-      content: '';
-      position: absolute;
-      width: 22px;
-      height: 22px;
-      background: var(--text-primary);
-      border-radius: 50%;
-      top: 3px;
-      left: 4px;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    }
-
-    .toggle-switch.active::after {
-      left: 32px;
-    }
-
-    .last-sync {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-    }
-
-    /* Popup Modals */
+    /* ── POPUPS ── */
     .popup-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(10px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
+      position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 3000; opacity: 0; pointer-events: none; transition: opacity 0.25s;
     }
-
-    .popup-overlay.active {
-      opacity: 1;
-      pointer-events: all;
-    }
-
+    .popup-overlay.active { opacity: 1; pointer-events: all; }
     .popup {
-      background: var(--bg-card);
-      border: 1px solid rgba(0, 255, 204, 0.2);
-      border-radius: 20px;
-      padding: 40px 30px;
-      max-width: 400px;
-      width: 90%;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-      animation: popupSlideIn 0.4s ease;
-      text-align: center;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 32px 24px;
+      max-width: 360px; width: 90%; box-shadow: var(--shadow-lg);
+      text-align: center; animation: popIn 0.3s ease;
     }
+    @keyframes popIn { from { transform: scale(0.92) translateY(8px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+    .popup-icon { font-size: 2.5rem; margin-bottom: 12px; }
+    .popup-title { font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .popup-text { font-size: 0.85rem; color: var(--text2); line-height: 1.6; margin-bottom: 20px; }
+    .popup-btns { display: flex; gap: 10px; justify-content: center; }
+    .pbtn { padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; border: none; transition: all 0.2s; font-family: inherit; }
+    .pbtn-primary { background: var(--accent); color: white; }
+    .pbtn-primary:hover { background: var(--accent-dark); }
+    .pbtn-secondary { background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
+    .pbtn-secondary:hover { background: var(--border); }
 
-    @keyframes popupSlideIn {
-      from {
-        opacity: 0;
-        transform: translateY(-30px) scale(0.9);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-up { animation: fadeUp 0.4s ease backwards; }
 
-    .popup-icon {
-      font-size: 4rem;
-      margin-bottom: 20px;
-    }
-
-    .popup-title {
-      font-family: 'Orbitron', monospace;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--accent-primary);
-      margin-bottom: 15px;
-    }
-
-    .popup-text {
-      color: var(--text-secondary);
-      font-size: 1rem;
-      line-height: 1.6;
-      margin-bottom: 25px;
-    }
-
-    .popup-buttons {
-      display: flex;
-      gap: 15px;
-      justify-content: center;
-    }
-
-    .popup-btn {
-      font-family: 'Orbitron', monospace;
-      padding: 12px 25px;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      transition: all 0.3s ease;
-    }
-
-    .popup-btn-primary {
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      color: var(--bg-primary);
-      box-shadow: 0 4px 15px var(--glow-primary);
-    }
-
-    .popup-btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px var(--glow-primary);
-    }
-
-    .popup-btn-secondary {
-      background: transparent;
-      color: var(--text-secondary);
-      border: 1px solid rgba(0, 255, 204, 0.3);
-    }
-
-    .popup-btn-secondary:hover {
-      border-color: var(--accent-primary);
-      color: var(--accent-primary);
-    }
-
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @media (max-width: 480px) {
-      .logo { font-size: 2rem; }
-      .big-number { font-size: 4rem; }
-      .popup { padding: 30px 20px; }
+    @media (max-width: 400px) {
+      .big-pct { font-size: 2.8rem; }
+      .usecase-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
 <body>
-  <div class="background-grid"></div>
-  <div class="background-gradient"></div>
 
-  <!-- Navigation -->
-  <nav class="navbar">
-    <button class="menu-btn" onclick="toggleMenu()">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-    <button class="account-btn" onclick="showLogin()">👤</button>
-  </nav>
+<!-- NAVBAR -->
+<nav class="navbar">
+  <button class="menu-btn" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+  <span class="nav-brand">io<span>Tank</span></span>
+  <div class="nav-badge">
+    <span class="nav-badge-dot"></span>
+    <span>LIVE</span>
+  </div>
+</nav>
 
-  <!-- Side Menu -->
-  <div class="menu-overlay" onclick="toggleMenu()"></div>
-  <div class="side-menu">
-    <div class="menu-header">
-      <div class="menu-logo">ioTank</div>
-    </div>
-    <div class="menu-items">
-      <a href="#" class="menu-item">
-        <span class="menu-item-icon">❓</span>
-        <span>Help</span>
-      </a>
-      <a href="#" class="menu-item">
-        <span class="menu-item-icon">📧</span>
-        <span>Contact Us</span>
-      </a>
-      <a href="#" class="menu-item">
-        <span class="menu-item-icon">🔧</span>
-        <span>Troubleshoot</span>
-      </a>
-      <a href="#" class="menu-item">
-        <span class="menu-item-icon">📦</span>
-        <span>Our Products</span>
-      </a>
-    </div>
+<!-- SIDE MENU -->
+<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+<div class="side-menu" id="sideMenu">
+  <div class="side-menu-head">
+    <div class="side-menu-logo">ioTank</div>
+    <div class="side-menu-sub">Universal Tank Monitor v2.0</div>
+  </div>
+  <div class="side-menu-items">
+    <a href="#" class="side-item"><span class="si-icon">📊</span> Dashboard</a>
+    <a href="#" class="side-item"><span class="si-icon">📈</span> Analytics</a>
+    <a href="#" class="side-item"><span class="si-icon">🔔</span> Alerts</a>
+    <a href="#" class="side-item"><span class="si-icon">🔧</span> Troubleshoot</a>
+    <a href="#" class="side-item"><span class="si-icon">❓</span> Help</a>
+    <a href="#" class="side-item"><span class="si-icon">📧</span> Contact Us</a>
+    <a href="#" class="side-item"><span class="si-icon">📦</span> Our Products</a>
+    <a href="#" class="side-item" onclick="showTab('about'); toggleMenu(); return false;"><span class="si-icon">ℹ️</span> About ioTank</a>
+  </div>
+</div>
+
+<!-- ══════════════ DASHBOARD PAGE ══════════════ -->
+<div id="page-dashboard" class="page active">
+
+  <!-- Material Selector -->
+  <div class="material-bar">
+    <button class="mat-chip active" data-mat="water" onclick="setMaterial(this)">💧 Water</button>
+    <button class="mat-chip" data-mat="oil" onclick="setMaterial(this)">🛢 Oil</button>
+    <button class="mat-chip" data-mat="fuel" onclick="setMaterial(this)">⛽ Fuel</button>
+    <button class="mat-chip" data-mat="chemical" onclick="setMaterial(this)">⚗️ Chemical</button>
+    <button class="mat-chip" data-mat="grain" onclick="setMaterial(this)">🌾 Grain</button>
   </div>
 
-  <div class="container">
-    <div class="header">
-      <div class="logo">ioTank</div>
-      <div class="subtitle">Smart Water Management</div>
-    </div>
-
-    <div class="main-card">
-      <div class="tank-header">
-        <div class="status-indicator"></div>
-        <div class="tank-title">Main Tank</div>
-      </div>
-
-      <div class="water-level-display">
-        <div class="big-number" id="waterLevel">2%</div>
-        <div class="water-label">Water Level</div>
-      </div>
-
-      <div class="tank-visual">
-        <div class="tank-frame">
-          <div class="water-fill" id="waterFill" style="height: 2%;"></div>
+  <!-- Main Level Card -->
+  <div class="main-card fade-up">
+    <div class="card-row">
+      <div>
+        <div class="card-title" id="materialLabel">Water Tank</div>
+        <div style="margin-top:6px;" id="statusBadge">
+          <span class="status-badge low">⚠ LOW LEVEL</span>
         </div>
       </div>
+      <div class="live-tag"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;"></span> Live</div>
+    </div>
 
-      <!-- Status Boxes -->
-      <div class="status-grid">
-        <div class="status-box">
-          <div class="status-box-label">Status</div>
-          <div class="status-box-value low" id="tankStatus">LOW</div>
+    <div class="level-display">
+      <!-- Tank visual -->
+      <div style="position:relative; padding-left: 40px; flex-shrink:0;">
+        <div class="tank-visual" id="tankVisual">
+          <div class="tank-fill" id="tankFill" style="height:2%"></div>
         </div>
-        <div class="status-box">
-          <div class="battery-icon">🔋</div>
-          <div class="status-box-label">Battery</div>
-          <div class="status-box-value" id="batteryLevel">12%</div>
+        <div class="tank-tick" style="top:0%; bottom:auto;"></div>
+        <div class="tank-tick-label" style="top:0%">100%</div>
+        <div class="tank-tick" style="top:25%"></div>
+        <div class="tank-tick-label" style="top:25%">75%</div>
+        <div class="tank-tick" style="top:50%"></div>
+        <div class="tank-tick-label" style="top:50%">50%</div>
+        <div class="tank-tick" style="top:75%"></div>
+        <div class="tank-tick-label" style="top:75%">25%</div>
+      </div>
+
+      <div class="level-info">
+        <div class="big-pct"><span id="levelNum">2</span><span>%</span></div>
+        <div class="level-label" id="levelLabelText">Tank Level</div>
+        <div class="level-bar">
+          <div class="level-bar-fill" id="levelBarFill" style="width:2%"></div>
+        </div>
+        <div class="level-stats">
+          <div class="level-stat">
+            <div class="level-stat-val" id="distanceCm">—</div>
+            <div class="level-stat-lbl">Dist (cm)</div>
+          </div>
+          <div class="level-stat">
+            <div class="level-stat-val" id="estVolume">—</div>
+            <div class="level-stat-lbl">Est. Litres</div>
+          </div>
         </div>
       </div>
-
-      <button class="pump-button" id="pumpButton" onclick="togglePump()">
-        START PUMP
-      </button>
-
-      <div class="notifications-section">
-        <div class="notifications-label">Notifications</div>
-        <div class="toggle-switch" id="notificationToggle" onclick="toggleNotifications()"></div>
-      </div>
-
-      <div class="last-sync" id="lastSync">Last Sync: 6:22:48 PM</div>
     </div>
   </div>
 
-  <!-- Install Popup -->
-  <div class="popup-overlay" id="installPopup">
-    <div class="popup">
-      <div class="popup-icon">📱</div>
-      <div class="popup-title">Install ioTank</div>
-      <div class="popup-text">
-        Install our app for a better experience with offline support and notifications!
-      </div>
-      <div class="popup-buttons">
-        <button class="popup-btn popup-btn-primary" onclick="installApp()">Install</button>
-        <button class="popup-btn popup-btn-secondary" onclick="dismissInstall()">Maybe Later</button>
-      </div>
+  <!-- Stat Cards -->
+  <div class="status-row fade-up" style="animation-delay:0.1s">
+    <div class="stat-card">
+      <div class="stat-icon">🔋</div>
+      <div class="stat-val" id="battVal">12%</div>
+      <div class="stat-lbl">Battery</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📶</div>
+      <div class="stat-val" id="signalVal">—</div>
+      <div class="stat-lbl">Signal</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🌡</div>
+      <div class="stat-val" id="tempVal">—</div>
+      <div class="stat-lbl">Temp</div>
     </div>
   </div>
 
-  <!-- Offline Popup -->
-  <div class="popup-overlay" id="offlinePopup">
-    <div class="popup">
-      <div class="popup-icon">📡</div>
-      <div class="popup-title">No Internet Connection</div>
-      <div class="popup-text">
-        You're currently offline. The app will sync automatically when connection is restored.
+  <!-- Pump Controller -->
+  <div class="pump-card fade-up" style="animation-delay:0.15s">
+    <div class="pump-header">
+      <div>
+        <div class="pump-label">Pump Controller</div>
+        <div class="pump-sub" id="pumpStatusText">Pump is OFF — Manual control</div>
       </div>
-      <div class="popup-buttons">
-        <button class="popup-btn popup-btn-primary" onclick="dismissOffline()">OK</button>
-      </div>
+      <div class="pump-status-dot" id="pumpDot"></div>
+    </div>
+    <button class="pump-btn" id="pumpBtn" onclick="togglePump()">▶ START PUMP</button>
+    <div class="pump-meta">
+      <div class="pump-meta-item">Last run: <strong id="lastPumpRun">—</strong></div>
+      <div class="pump-meta-item">Total today: <strong id="pumpRunTime">0 min</strong></div>
     </div>
   </div>
 
-  <!-- Login Popup -->
-  <div class="popup-overlay" id="loginPopup">
-    <div class="popup">
-      <div class="popup-icon">👤</div>
-      <div class="popup-title">Login</div>
-      <div class="popup-text">
-        Login feature coming soon! Stay tuned for updates.
+  <!-- Notifications -->
+  <div class="notif-card fade-up" style="animation-delay:0.2s">
+    <div>
+      <div class="notif-lbl">Notifications</div>
+      <div class="notif-sub">Low level & pump alerts</div>
+    </div>
+    <button class="toggle" id="notifToggle" onclick="toggleNotif()"></button>
+  </div>
+
+  <!-- Last sync -->
+  <div class="sync-row">
+    🔄 Last sync: <strong id="lastSync">—</strong>
+  </div>
+</div>
+
+<!-- ══════════════ ANALYTICS PAGE ══════════════ -->
+<div id="page-analytics" class="page">
+  <div class="container" style="padding-top:12px;">
+
+    <div class="analytics-section">
+      <div class="section-title">Usage Insights</div>
+      <div class="insight-grid">
+        <div class="insight-card">
+          <div class="insight-val" id="avgDaily">—</div>
+          <div class="insight-lbl">Avg Daily Use</div>
+          <div class="insight-change up" id="dailyChange">—</div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-val" id="peakHour">—</div>
+          <div class="insight-lbl">Peak Hour</div>
+          <div class="insight-change" id="peakNote">—</div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-val" id="cyclesMonth">—</div>
+          <div class="insight-lbl">Fill Cycles/Mo</div>
+          <div class="insight-change down" id="cyclesChange">—</div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-val" id="efficiency">—</div>
+          <div class="insight-lbl">Efficiency</div>
+          <div class="insight-change up" id="effChange">—</div>
+        </div>
       </div>
-      <div class="popup-buttons">
-        <button class="popup-btn popup-btn-primary" onclick="dismissLogin()">OK</button>
+    </div>
+
+    <!-- Daily chart -->
+    <div class="analytics-section">
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <div>
+            <div class="chart-card-title">Level — Today</div>
+            <div class="chart-card-sub">Hourly readings (live)</div>
+          </div>
+          <div class="chart-tab-row">
+            <button class="chart-tab active" onclick="switchChart('daily', this)">Day</button>
+            <button class="chart-tab" onclick="switchChart('weekly', this)">Week</button>
+            <button class="chart-tab" onclick="switchChart('monthly', this)">Month</button>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="levelChart" height="160"></canvas>
+        </div>
       </div>
+    </div>
+
+    <!-- Usage chart -->
+    <div class="analytics-section">
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <div>
+            <div class="chart-card-title">Consumption Pattern</div>
+            <div class="chart-card-sub">% used per time block</div>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="usageChart" height="140"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pump cycles chart -->
+    <div class="analytics-section">
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <div>
+            <div class="chart-card-title">Monthly Fill Cycles</div>
+            <div class="chart-card-sub">Number of pump runs per month</div>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="cyclesChart" height="140"></canvas>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════ ABOUT PAGE ══════════════ -->
+<div id="page-about" class="page">
+
+  <div class="about-hero">
+    <div class="about-logo">ioTank</div>
+    <div class="about-tagline">Universal Smart Tank Monitoring & Remote Control System — Built for Industry, Priced for Everyone.</div>
+    <div class="about-badges">
+      <span class="about-badge">🏆 IoT Competition 2025</span>
+      <span class="about-badge">📡 Firebase Real-Time</span>
+      <span class="about-badge">🌐 PWA</span>
+      <span class="about-badge">🔧 DIY Hardware</span>
     </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-    import { getDatabase, ref, set, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
-    import { getMessaging, getToken } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js';
+  <div class="about-body">
 
-    // Firebase configuration
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      databaseURL: "https://my-tank-8848e-default-rtdb.firebaseio.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
+    <!-- What is this? -->
+    <div class="about-card">
+      <div class="about-card-title"><span class="icon">🎯</span> What is ioTank?</div>
+      <p class="about-text">ioTank is an <strong>IoT-based smart tank monitoring and remote control system</strong> that uses an ultrasonic sensor to measure the exact distance between the top of any storage tank and the surface of the stored material — converting that measurement into an accurate fill-level percentage in real time.</p>
+      <p class="about-text">Unlike traditional float-based gauges or manual dip-stick methods, ioTank requires <strong>no physical contact with the liquid</strong>, making it safe for water, oil, chemicals, fuels, grains, and virtually any pourable material. The data streams live to a Firebase cloud database and is instantly viewable on this PWA — from anywhere in the world.</p>
+    </div>
 
+    <!-- Problem it solves -->
+    <div class="about-card">
+      <div class="about-card-title"><span class="icon">💡</span> The Real-World Problem</div>
+      <p class="about-text">Every day, people and industries face a silent, costly problem: <strong>they don't know what's in their tanks</strong> until it's too late. Families run out of water. Factories halt production because a chemical tank ran dry. Diesel generators shut down because the fuel tank wasn't topped up. Farmers over-irrigate because they had no level data.</p>
+      <p class="about-text">Current solutions either require manual inspection (time-consuming, inaccurate, sometimes dangerous) or industrial-grade sensors that cost ₹15,000–₹50,000 per unit — completely out of reach for small businesses, farms, and households.</p>
+      <p class="about-text"><strong>ioTank solves this for a fraction of the cost.</strong></p>
+    </div>
+
+    <!-- How it works -->
+    <div class="about-card">
+      <div class="about-card-title"><span class="icon">⚙️</span> How It Works</div>
+      <ul class="feature-list">
+        <li class="feature-item"><span class="feature-icon">📡</span><div><strong>Ultrasonic Sensing:</strong> An HC-SR04 ultrasonic sensor mounted at the top of the tank fires a 40kHz sound pulse. The time it takes to bounce back gives the exact distance to the material surface.</div></li>
+        <li class="feature-item"><span class="feature-icon">🧠</span><div><strong>Microcontroller:</strong> An ESP8266/ESP32 processes the distance, calculates the fill percentage based on pre-set tank height, and connects to Wi-Fi.</div></li>
+        <li class="feature-item"><span class="feature-icon">☁️</span><div><strong>Firebase Cloud:</strong> Data is pushed to Google Firebase Realtime Database every few seconds. No server needed — everything is serverless.</div></li>
+        <li class="feature-item"><span class="feature-icon">📱</span><div><strong>PWA Dashboard:</strong> This web app reads from Firebase and displays live level, analytics, and gives you remote pump control — all from your phone, installable like a native app.</div></li>
+        <li class="feature-item"><span class="feature-icon">🔌</span><div><strong>Pump Control:</strong> A relay module connected to the ESP allows you to start or stop the pump remotely with one tap — no electrician needed.</div></li>
+      </ul>
+    </div>
+
+    <!-- Who it helps -->
+    <div class="about-card">
+      <div class="about-card-title"><span class="icon">🌍</span> Who Can Benefit?</div>
+      <div class="usecase-grid">
+        <div class="usecase-item">
+          <div class="usecase-icon">🏠</div>
+          <div class="usecase-name">Households</div>
+          <div class="usecase-desc">Never run out of overhead water tank storage again</div>
+        </div>
+        <div class="usecase-item">
+          <div class="usecase-icon">🏭</div>
+          <div class="usecase-name">Industries</div>
+          <div class="usecase-desc">Monitor chemical, fuel & raw material silos remotely</div>
+        </div>
+        <div class="usecase-item">
+          <div class="usecase-icon">🌾</div>
+          <div class="usecase-name">Agriculture</div>
+          <div class="usecase-desc">Track irrigation water & fertiliser storage levels</div>
+        </div>
+        <div class="usecase-item">
+          <div class="usecase-icon">🛢</div>
+          <div class="usecase-name">Fuel Depots</div>
+          <div class="usecase-desc">Real-time diesel/petrol tank monitoring for fleets</div>
+        </div>
+        <div class="usecase-item">
+          <div class="usecase-icon">🏗</div>
+          <div class="usecase-name">Construction</div>
+          <div class="usecase-desc">Water supply management at remote construction sites</div>
+        </div>
+        <div class="usecase-item">
+          <div class="usecase-icon">🏥</div>
+          <div class="usecase-name">Hospitals</div>
+          <div class="usecase-desc">Uninterrupted water supply — critical for healthcare</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Technical Specs -->
+    <div class="about-card">
+      <div class="about-card-title"><span class="icon">📋</span> Technical Specifications</div>
+      <div class="spec-row"><span class="spec-key">Sensor Range</span><span class="spec-val">2 cm – 400 cm</span></div>
+      <div class="spec-row"><span class="spec-key">Accuracy</span><span class="spec-val">±3 mm</span></div>
+      <div class="spec-row"><span class="spec-key">Update Interval</span><span class="spec-val">~5 seconds</span></div>
+      <div class="spec-row"><span class="spec-key">Connectivity</span><span class="spec-val">Wi-Fi 2.4GHz (802.11 b/g/n)</span></div>
+      <div class="spec-row"><span class="spec-key">Cloud Platform</span><span class="spec-val">Google Firebase (Real-time DB)</span></div>
+      <div class="spec-row"><span class="spec-key">Power Supply</span><span class="spec-val">3.7V Li-ion / 5V USB</span></div>
+      <div class="spec-row"><span class="spec-key">Battery Life</span><span class="spec-val">~12–48 hrs (deep sleep mode)</span></div>
+      <div class="spec-row"><span class="spec-key">Compatible Materials</span><span class="spec-val">Water, Oil, Fuel, Chemicals, Grain</span></div>
+      <div class="spec-row"><span class="spec-key">Pump Control</span><span class="spec-val">Remote via relay (up to 250V AC, 10A)</span></div>
+      <div class="spec-row"><span class="spec-key">App Platform</span><span class="spec-val">PWA — iOS, Android, Desktop</span></div>
+      <div class="spec-row"><span class="spec-key">Offline Support</span><span class="spec-val">Yes — Service Worker caching</span></div>
+    </div>
+
+    <!-- Future Scope -->
+    <div class="about-card">
+      <div class="about-card-title"><span class="icon">🚀</span> Future Roadmap</div>
+      <ul class="feature-list">
+        <li class="feature-item"><span class="feature-icon">🤖</span><div><strong>AI Predictions:</strong> Machine learning to predict empty dates and auto-schedule pump runs based on usage patterns.</div></li>
+        <li class="feature-item"><span class="feature-icon">🌦</span><div><strong>Weather Integration:</strong> Sync with weather APIs to factor in rainfall for smarter irrigation management.</div></li>
+        <li class="feature-item"><span class="feature-icon">📲</span><div><strong>SMS/WhatsApp Alerts:</strong> Send low-level alerts via Twilio even without internet on the monitoring device.</div></li>
+        <li class="feature-item"><span class="feature-icon">🔗</span><div><strong>Multi-Tank Dashboard:</strong> Monitor 10+ tanks from a single dashboard — ideal for industries and apartment complexes.</div></li>
+        <li class="feature-item"><span class="feature-icon">🛰</span><div><strong>GSM/LoRa Support:</strong> Non-Wi-Fi deployment using SIM800L or LoRa for remote farms and construction sites.</div></li>
+      </ul>
+    </div>
+
+    <div style="text-align:center; padding: 16px; font-size:0.75rem; color:var(--text3);">
+      ioTank v2.0 · Built for IoT Hardware Competition 2025<br>
+      IoT Device made by <strong style="color:var(--text2);">Aman Shaw</strong> · Made with ❤️ in India
+    </div>
+
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="nav-tab active" id="tab-dashboard" onclick="showTab('dashboard')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    Dashboard
+  </button>
+  <button class="nav-tab" id="tab-analytics" onclick="showTab('analytics')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    Analytics
+  </button>
+  <button class="nav-tab" id="tab-about" onclick="showTab('about')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16" stroke-linecap="round" stroke-width="3"/></svg>
+    About
+  </button>
+</nav>
+
+<!-- POPUPS -->
+<div class="popup-overlay" id="installPopup">
+  <div class="popup">
+    <div class="popup-icon">📱</div>
+    <div class="popup-title">Install ioTank</div>
+    <div class="popup-text">Add to your home screen for offline access, push notifications, and a native app experience.</div>
+    <div class="popup-btns">
+      <button class="pbtn pbtn-primary" onclick="installApp()">Install</button>
+      <button class="pbtn pbtn-secondary" onclick="dismissInstall()">Later</button>
+    </div>
+  </div>
+</div>
+
+<div class="popup-overlay" id="offlinePopup">
+  <div class="popup">
+    <div class="popup-icon">📡</div>
+    <div class="popup-title">No Connection</div>
+    <div class="popup-text">You're offline. Showing last cached data. Live updates will resume when connection is restored.</div>
+    <div class="popup-btns">
+      <button class="pbtn pbtn-primary" onclick="dismissOffline()">OK</button>
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+  import { getDatabase, ref, set, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    databaseURL: "https://my-tank-8848e-default-rtdb.firebaseio.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  let database;
+  try {
     const app = initializeApp(firebaseConfig);
-    const database = getDatabase(app);
-    const messaging = getMessaging(app);
-
-    let currentData = null;
-    let pumpActive = false;
-
-    // Listen for real-time data updates
-    function initializeRealtimeData() {
-      const deviceRef = ref(database, '/');
-      onValue(deviceRef, (snapshot) => {
-        if (snapshot.exists()) {
-          currentData = snapshot.val();
-          updateDisplay();
-        }
-      }, (error) => {
-        console.error('Firebase error:', error);
-      });
-    }
-
-    function updateDisplay() {
-      if (currentData) {
-        const water = currentData.water || 0;
-        const battery = currentData.battery || 0;
-        
-        // Update water level
-        document.getElementById('waterLevel').textContent = `${water}%`;
-        document.getElementById('waterFill').style.height = `${water}%`;
-        
-        // Update tank status
-        const statusEl = document.getElementById('tankStatus');
-        if (water < 20) {
-          statusEl.textContent = 'LOW';
-          statusEl.className = 'status-box-value low';
-        } else if (water >= 100) {
-          statusEl.textContent = 'FULL';
-          statusEl.className = 'status-box-value full';
-        } else if (pumpActive) {
-          statusEl.textContent = 'FILLING';
-          statusEl.className = 'status-box-value filling';
-        } else {
-          statusEl.textContent = 'NORMAL';
-          statusEl.className = 'status-box-value';
-        }
-        
-        // Update battery
-        document.getElementById('batteryLevel').textContent = `${battery}%`;
-        
-        // Update last sync
-        if (currentData.timestamp) {
-          const date = new Date(currentData.timestamp);
-          document.getElementById('lastSync').textContent = 
-            `Last Sync: ${date.toLocaleTimeString()}`;
-        }
+    database = getDatabase(app);
+    const deviceRef = ref(database, '/');
+    onValue(deviceRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const d = snapshot.val();
+        window._fbData = d;
+        updateDashboard(d);
       }
-    }
+    });
+  } catch(e) {
+    console.warn('Firebase not configured — using demo data');
+    useDemoData();
+  }
 
-    // Pump control
-    window.togglePump = async function() {
-      pumpActive = !pumpActive;
-      const button = document.getElementById('pumpButton');
-      
-      if (pumpActive) {
-        button.textContent = 'STOP PUMP';
-        button.classList.add('active');
-      } else {
-        button.textContent = 'START PUMP';
-        button.classList.remove('active');
-      }
-      
-      // Update Firebase
+  window.togglePump = async function() {
+    window._pumpActive = !window._pumpActive;
+    const btn = document.getElementById('pumpBtn');
+    const dot = document.getElementById('pumpDot');
+    const txt = document.getElementById('pumpStatusText');
+    if (window._pumpActive) {
+      btn.textContent = '⏹ STOP PUMP';
+      btn.classList.add('active');
+      dot.classList.add('active');
+      txt.textContent = 'Pump is RUNNING — tap to stop';
+      document.getElementById('lastPumpRun').textContent = new Date().toLocaleTimeString();
+    } else {
+      btn.textContent = '▶ START PUMP';
+      btn.classList.remove('active');
+      dot.classList.remove('active');
+      txt.textContent = 'Pump is OFF — Manual control';
+    }
+    if (database) {
       try {
-        await set(ref(database, '/pumpStatus'), {
-          active: pumpActive,
-          timestamp: Date.now()
-        });
-      } catch (error) {
-        console.error('Error updating pump status:', error);
-      }
-      
-      updateDisplay();
-    };
-
-    // Menu toggle
-    window.toggleMenu = function() {
-      document.querySelector('.side-menu').classList.toggle('active');
-      document.querySelector('.menu-overlay').classList.toggle('active');
-    };
-
-    // Notification toggle
-    window.toggleNotifications = function() {
-      const toggle = document.getElementById('notificationToggle');
-      toggle.classList.toggle('active');
-      
-      if (toggle.classList.contains('active')) {
-        // Request notification permission
-        if ('Notification' in window) {
-          Notification.requestPermission();
-        }
-      }
-    };
-
-    // Show login
-    window.showLogin = function() {
-      document.getElementById('loginPopup').classList.add('active');
-    };
-
-    window.dismissLogin = function() {
-      document.getElementById('loginPopup').classList.remove('active');
-    };
-
-    // PWA Install
-    let deferredPrompt;
-    
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      
-      // Check if already installed
-      if (!window.matchMedia('(display-mode: standalone)').matches) {
-        // Show install popup after 2 seconds
-        setTimeout(() => {
-          if (!localStorage.getItem('installDismissed')) {
-            document.getElementById('installPopup').classList.add('active');
-          }
-        }, 2000);
-      }
-    });
-
-    window.installApp = async function() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        console.log(`User response: ${outcome}`);
-        deferredPrompt = null;
-      }
-      document.getElementById('installPopup').classList.remove('active');
-    };
-
-    window.dismissInstall = function() {
-      localStorage.setItem('installDismissed', 'true');
-      document.getElementById('installPopup').classList.remove('active');
-    };
-
-    // Online/Offline detection
-    window.addEventListener('online', () => {
-      document.getElementById('offlinePopup').classList.remove('active');
-      console.log('Back online');
-    });
-
-    window.addEventListener('offline', () => {
-      document.getElementById('offlinePopup').classList.add('active');
-    });
-
-    window.dismissOffline = function() {
-      document.getElementById('offlinePopup').classList.remove('active');
-    };
-
-    // Service Worker Registration
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(registration => {
-            console.log('SW registered:', registration);
-          })
-          .catch(error => {
-            console.log('SW registration failed:', error);
-          });
-      });
+        await set(ref(database, '/pumpStatus'), { active: window._pumpActive, timestamp: Date.now() });
+      } catch(e) { console.warn('Firebase write failed'); }
     }
+  };
 
-    // Initialize
-    initializeRealtimeData();
-  </script>
+  window._pumpActive = false;
+
+  function updateDashboard(d) {
+    const level = d.water ?? 2;
+    const battery = d.battery ?? 12;
+    document.getElementById('levelNum').textContent = Math.round(level);
+    document.getElementById('tankFill').style.height = level + '%';
+    document.getElementById('levelBarFill').style.width = level + '%';
+    document.getElementById('battVal').textContent = battery + '%';
+    document.getElementById('distanceCm').textContent = d.distance ? Math.round(d.distance) : '—';
+    document.getElementById('estVolume').textContent = d.volume ? d.volume : '—';
+    document.getElementById('signalVal').textContent = d.signal ? d.signal + 'dB' : 'Good';
+    document.getElementById('tempVal').textContent = d.temp ? d.temp + '°' : '—';
+    if (d.timestamp) document.getElementById('lastSync').textContent = new Date(d.timestamp).toLocaleTimeString();
+    updateStatus(level);
+  }
+
+  function updateStatus(level) {
+    const el = document.getElementById('statusBadge');
+    let cls, label;
+    if (level < 15) { cls = 'low'; label = '⚠ LOW LEVEL'; }
+    else if (level >= 95) { cls = 'full'; label = '✓ TANK FULL'; }
+    else if (window._pumpActive) { cls = 'filling'; label = '⬆ FILLING'; }
+    else if (level > 75) { cls = 'high'; label = '✓ HIGH LEVEL'; }
+    else { cls = 'normal'; label = '✓ NORMAL'; }
+    el.innerHTML = `<span class="status-badge ${cls}">${label}</span>`;
+  }
+
+  function useDemoData() {
+    const demo = { water: 38, battery: 71, distance: 62, volume: 380, signal: -68, temp: 29, timestamp: Date.now() };
+    updateDashboard(demo);
+    setInterval(() => {
+      demo.timestamp = Date.now();
+      document.getElementById('lastSync').textContent = new Date().toLocaleTimeString();
+    }, 5000);
+  }
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('/service-worker.js').catch(() => {}));
+  }
+
+  window.addEventListener('offline', () => document.getElementById('offlinePopup').classList.add('active'));
+  window.addEventListener('online', () => document.getElementById('offlinePopup').classList.remove('active'));
+
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault(); deferredPrompt = e;
+    if (!window.matchMedia('(display-mode: standalone)').matches && !localStorage.getItem('installDismissed')) {
+      setTimeout(() => document.getElementById('installPopup').classList.add('active'), 3000);
+    }
+  });
+  window.installApp = async () => {
+    if (deferredPrompt) { deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; }
+    document.getElementById('installPopup').classList.remove('active');
+  };
+  window.dismissInstall = () => { localStorage.setItem('installDismissed', '1'); document.getElementById('installPopup').classList.remove('active'); };
+  window.dismissOffline = () => document.getElementById('offlinePopup').classList.remove('active');
+</script>
+
+<script>
+  // ── TAB NAVIGATION ──
+  function showTab(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    document.getElementById('tab-' + name).classList.add('active');
+    if (name === 'analytics') initCharts();
+  }
+  window.showTab = showTab;
+
+  // ── MENU ──
+  function toggleMenu() {
+    document.getElementById('sideMenu').classList.toggle('open');
+    document.getElementById('menuOverlay').classList.toggle('open');
+  }
+  window.toggleMenu = toggleMenu;
+
+  // ── MATERIAL SELECTOR ──
+  const matConfig = {
+    water:    { label: 'Water Tank',    fillClass: '',          color: ['#60a5fa','#2563eb'], unit: 'Litres' },
+    oil:      { label: 'Oil Tank',      fillClass: 'oil',       color: ['#fbbf24','#d97706'], unit: 'Litres' },
+    fuel:     { label: 'Fuel Tank',     fillClass: 'fuel',      color: ['#fb923c','#ea580c'], unit: 'Litres' },
+    chemical: { label: 'Chemical Tank', fillClass: 'chemical',  color: ['#a78bfa','#7c3aed'], unit: 'Litres' },
+    grain:    { label: 'Grain Silo',    fillClass: 'grain',     color: ['#fde68a','#d97706'], unit: 'kg' },
+  };
+
+  function setMaterial(btn) {
+    document.querySelectorAll('.mat-chip').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    const mat = btn.dataset.mat;
+    const cfg = matConfig[mat];
+    document.getElementById('materialLabel').textContent = cfg.label;
+    document.getElementById('levelLabelText').textContent = mat.charAt(0).toUpperCase() + mat.slice(1) + ' Level';
+    const fill = document.getElementById('tankFill');
+    fill.className = 'tank-fill ' + cfg.fillClass;
+    document.getElementById('estVolume').parentElement.querySelector('.level-stat-lbl').textContent = cfg.unit;
+    // update bar color
+    document.getElementById('levelBarFill').style.background = `linear-gradient(90deg, ${cfg.color[1]}, ${cfg.color[0]})`;
+    if (window._chartInstances) {
+      window._chartInstances.forEach(c => { c.data.datasets[0].borderColor = cfg.color[0]; c.data.datasets[0].backgroundColor = cfg.color[0] + '22'; c.update(); });
+    }
+  }
+  window.setMaterial = setMaterial;
+
+  // ── NOTIFICATION TOGGLE ──
+  function toggleNotif() {
+    const t = document.getElementById('notifToggle');
+    t.classList.toggle('on');
+    if (t.classList.contains('on') && 'Notification' in window) Notification.requestPermission();
+  }
+  window.toggleNotif = toggleNotif;
+
+  // ── CHARTS ──
+  let chartsInited = false;
+  window._chartInstances = [];
+
+  function initCharts() {
+    if (chartsInited) return;
+    chartsInited = true;
+
+    // Insight cards
+    document.getElementById('avgDaily').textContent = '23L';
+    document.getElementById('dailyChange').textContent = '↑ 4% vs yesterday';
+    document.getElementById('peakHour').textContent = '7 AM';
+    document.getElementById('peakNote').textContent = 'Morning usage peak';
+    document.getElementById('cyclesMonth').textContent = '14';
+    document.getElementById('cyclesChange').textContent = '↓ 2 vs last month';
+    document.getElementById('efficiency').textContent = '94%';
+    document.getElementById('effChange').textContent = '↑ 2% improvement';
+
+    const gridColor = 'rgba(0,0,0,0.05)';
+    const textColor = '#94a3be';
+    const defaults = {
+      responsive: true,
+      plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1a2035', titleColor: '#fff', bodyColor: '#94a3be', cornerRadius: 8, padding: 10 } },
+      scales: {
+        x: { grid: { color: gridColor }, ticks: { color: textColor, font: { family: 'DM Sans', size: 11 } } },
+        y: { grid: { color: gridColor }, ticks: { color: textColor, font: { family: 'DM Sans', size: 11 } }, beginAtZero: true }
+      }
+    };
+
+    // Daily level chart
+    const hrs = ['6am','7am','8am','9am','10am','11am','12pm','1pm','2pm','3pm','4pm','5pm','6pm','7pm','8pm'];
+    const lvls = [55,40,35,38,42,45,50,48,44,40,42,38,35,36,38];
+    const ctx1 = document.getElementById('levelChart').getContext('2d');
+    const c1 = new Chart(ctx1, {
+      type: 'line',
+      data: {
+        labels: hrs, datasets: [{
+          data: lvls, borderColor: '#2563eb', backgroundColor: '#2563eb22',
+          fill: true, tension: 0.4, pointRadius: 3, pointBackgroundColor: '#2563eb', borderWidth: 2
+        }]
+      },
+      options: { ...defaults, scales: { ...defaults.scales, y: { ...defaults.scales.y, max: 100, ticks: { ...defaults.scales.y.ticks, callback: v => v + '%' } } } }
+    });
+    window._chartInstances.push(c1);
+
+    // Consumption bar chart
+    const ctx2 = document.getElementById('usageChart').getContext('2d');
+    const c2 = new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: ['00-04','04-08','08-12','12-16','16-20','20-24'],
+        datasets: [{
+          data: [4, 22, 35, 18, 30, 12],
+          backgroundColor: ['#2563eb44','#2563eb','#2563eb','#2563eb88','#2563eb','#2563eb66'],
+          borderRadius: 6
+        }]
+      },
+      options: { ...defaults, scales: { ...defaults.scales, y: { ...defaults.scales.y, ticks: { ...defaults.scales.y.ticks, callback: v => v + '%' } } } }
+    });
+    window._chartInstances.push(c2);
+
+    // Monthly cycles
+    const ctx3 = document.getElementById('cyclesChart').getContext('2d');
+    const months = ['Sep','Oct','Nov','Dec','Jan','Feb','Mar'];
+    const c3 = new Chart(ctx3, {
+      type: 'bar',
+      data: {
+        labels: months,
+        datasets: [{
+          data: [18, 15, 12, 16, 14, 13, 14],
+          backgroundColor: '#2563eb',
+          borderRadius: 6
+        }]
+      },
+      options: defaults
+    });
+    window._chartInstances.push(c3);
+  }
+
+  // Chart period switcher
+  const chartData = {
+    daily:   { labels: ['6am','8am','10am','12pm','2pm','4pm','6pm','8pm'], data: [55,38,42,50,44,40,36,38] },
+    weekly:  { labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],         data: [60,52,55,48,62,45,50] },
+    monthly: { labels: ['W1','W2','W3','W4'],                              data: [65,58,52,60] }
+  };
+  window.switchChart = function(period, btn) {
+    document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    const ch = window._chartInstances[0];
+    if (!ch) return;
+    ch.data.labels = chartData[period].labels;
+    ch.data.datasets[0].data = chartData[period].data;
+    ch.update();
+  };
+</script>
 </body>
 </html>
