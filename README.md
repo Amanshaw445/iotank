@@ -164,25 +164,6 @@ Edit the menu items in the HTML:
 - ✅ Firefox
 - ✅ Samsung Internet
 
-## Troubleshooting
-
-### Install Prompt Not Showing
-- Make sure you're using HTTPS
-- Check if service worker registered successfully (DevTools > Application)
-- Clear browser cache and try again
-
-### Offline Mode Not Working
-- Verify service worker is active (DevTools > Application > Service Workers)
-- Check console for any errors
-- Make sure all resources are being cached properly
-
-### Firebase Not Connecting
-- Verify your Firebase configuration
-- Check Firebase Realtime Database rules
-- Ensure your database URL is correct
-
-## License
-
 MIT License - Feel free to use and modify for your projects!
 
 ## Support
